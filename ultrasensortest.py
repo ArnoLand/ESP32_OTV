@@ -1,12 +1,11 @@
 from machine import Pin, time_pulse_us
 import time
 
-
 trig = Pin(13, Pin.OUT)
 echo = Pin(34, Pin.IN)
 led = Pin(25, Pin.OUT)
 
-def getDistance():
+def get_distance():
     trig.value(0)
     time.sleep_us(2)
     trig.value(1)
@@ -18,25 +17,24 @@ def getDistance():
     if duration < 0:
         return -1
     
-    distance = (duration/2)*0.343
+    distance = (duration / 2) * 0.343
     return distance
 
 def check_distance():
-    distance = getDistance()
+    distance = get_distance()
     if distance > 0 and distance <= 150:
         return True
     else:
         return False
-    
+
 while True:
     close = check_distance()
-        
+    
     if close:
         led.value(1)
-        print("ts worked twin")
+        print("LED ON: Object detected")
     else:
         led.value(0)
-        print("u cooked bro give up atp")
-            
+        print("LED OFF: No object")
+        
     time.sleep(0.5)
-
