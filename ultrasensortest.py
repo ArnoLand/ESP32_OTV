@@ -3,7 +3,7 @@ import time
 
 trig = Pin(13, Pin.OUT)
 echo = Pin(34, Pin.IN)
-led = Pin(25, Pin.OUT)
+#led = Pin(25, Pin.OUT)
 
 def get_distance():
     trig.value(0)
@@ -22,7 +22,7 @@ def get_distance():
 
 def check_distance():
     distance = get_distance()
-    if distance > 0 and distance <= 150:
+    if distance > 0 and distance <= 60:
         return True
     else:
         return False
@@ -31,10 +31,10 @@ while True:
     close = check_distance()
     
     if close:
-        led.value(1)
-        print("LED ON: Object detected")
+        #led.value(1)
+        print("tis close twin")
     else:
-        led.value(0)
-        print("LED OFF: No object")
+        #led.value(0)
+        print("tis too far away twin")
         
     time.sleep(0.5)
