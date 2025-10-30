@@ -1,11 +1,14 @@
 from ultrasonic import Ultrasonic
 from servo import Servo
+from hall import HallSensor 
 import time
 
 class RPController:
-    def __init__(self, trig_pin, echo_pin, servo_pin, servo_rpm, pinion_teeth, rack_teeth):
+    def __init__(self, trig_pin, echo_pin, servo_pin, hall_pin, servo_rpm, pinion_teeth, rack_teeth):
         self.sensor = Ultrasonic(trig_pin, echo_pin)
         self.servo = Servo(servo_pin)
+        self.hall = HallSensor(hall_pin)
+        
         self.spin_time = self._calculate_spin_time(servo_rpm, pinion_teeth, rack_teeth)
         self.speed = 0.8  
 
@@ -26,6 +29,16 @@ class RPController:
                 self.servo.forward(self.speed)
                 time.sleep(self.spin_time)
                 self.servo.stop()
+                # Pause for a moment to read the Hall sensor
+                print("Pausing to check Hall sensor...")
+                time.sleep(2)   
+
+                # Read the Hall sensor
+                if self.hall.is_magnet_detected():
+                    print("Magnet detected!")
+                else:
+                    print("No magnet detected.")
+                
                 self.servo.reverse(self.speed)
                 time.sleep(self.spin_time)
                 self.servo.stop()
