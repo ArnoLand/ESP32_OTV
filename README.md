@@ -8,7 +8,7 @@ Create a github account
 
 Create a folder on your computer called ENES_100 or whatever u want
 
-go to your computer's terminal(terminal on macOS, GIT bash/powershell/CMD or WSL if u rlly want on windows)
+go to your computer's terminal(terminal on macOS, GIT bash/powershell/CMD on windows)
 
 find the folder you created, use commands ls and cd to navigate your way
 
