@@ -25,7 +25,7 @@ class RPController:
             print("Distance:", round(distance, 2), "cm")
 
             if distance <= 6.0:  # 60 mm
-                print("We starting twin")
+                print("starting")
                 self.servo.forward(self.speed)
                 time.sleep(self.spin_time)
                 self.servo.stop()
