@@ -1,5 +1,8 @@
+from enes100 import enes100
 from machine import Pin, PWM
 import time
+
+#enes100.begin("Talhapins", "DATA", 582, 1116)
 
 
 class Motor:    
@@ -122,6 +125,14 @@ def main():
     try:
         print("Testing 4-motor movements...")
         
+           
+        # Spin right in place
+        print("Spin right")
+        motors.spin_right(0.6)
+        time.sleep(2)
+        motors.stop()
+        time.sleep(1)
+        
         # Drive forward
         print("Forward")
         motors.forward(0.7)
@@ -156,13 +167,7 @@ def main():
         time.sleep(2)
         motors.stop()
         time.sleep(1)
-        
-        # Spin right in place
-        print("Spin right")
-        motors.spin_right(0.6)
-        time.sleep(2)
-        motors.stop()
-        time.sleep(1)
+     
         
 
         
