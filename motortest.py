@@ -1,7 +1,7 @@
-from machine import Pin, PWM, time_pulse_us
+from machine import Pin, PWM
 import time
 
-# ------------ Motor Classes ------------
+# Motor class
 class Motor:
     def __init__(self, IN1_pin, IN2_pin, EN_pin, pwm=1000):
         self.in1 = Pin(IN1_pin, Pin.OUT)
@@ -27,6 +27,7 @@ class Motor:
         self.in2.value(0)
         self.enable.duty_u16(0)
 
+# Motor controller
 class MotorController:
     def __init__(self):
         self.right = Motor(12, 13, 14)
@@ -40,11 +41,11 @@ class MotorController:
         self.right.reverse(speed)
         self.left.reverse(speed)
 
-    def spin_left(self, speed=0.5):
+    def spin_left(self, speed=0.6):
         self.left.reverse(speed)
         self.right.forward(speed)
 
-    def spin_right(self, speed=0.5):
+    def spin_right(self, speed=0.6):
         self.left.forward(speed)
         self.right.reverse(speed)
 
@@ -52,42 +53,31 @@ class MotorController:
         self.right.stop()
         self.left.stop()
 
-# ------------ Ultrasonic Sensor ------------
-class Ultrasonic:
-    def __init__(self, trig_pin, echo_pin):
-        self.trig = Pin(trig_pin, Pin.OUT)
-        self.echo = Pin(echo_pin, Pin.IN)
 
-    def get_distance(self):
-        self.trig.value(0)
-        time.sleep_us(2)
-        self.trig.value(1)
-        time.sleep_us(10)
-        self.trig.value(0)
-
-        duration = time_pulse_us(self.echo, 1, 30000)
-        if duration <= 0:
-            return None
-        distance = (duration / 2) * 0.0343  # cm
-        return distance
-
-# ------------ Ultrasonic Reaction Test ------------
+# ---------- Test ----------
 motor = MotorController()
-sensor = Ultrasonic(23, 36)
-THRESHOLD = 10  # cm
 
-print("Ultrasonic motor test starting... observe behavior!")
+print("Forward 2 seconds...")
+motor.forward(0.5)
+time.sleep(2)
+motor.stop()
+time.sleep(1)
 
-while True:
-    dist = sensor.get_distance()
-    if dist is None:
-        # Nothing detected → spin slowly
-        motor.spin_left(0.3)
-    elif dist <= THRESHOLD:
-        # Object detected → stop
-        motor.stop()
-    else:
-        # Object far → move forward
-        motor.forward(0.4)
+print("Reverse 2 seconds...")
+motor.reverse(0.5)
+time.sleep(2)
+motor.stop()
+time.sleep(1)
 
-    time.sleep(0.1)
+print("Spin left 2 seconds...")
+motor.spin_left(0.5)
+time.sleep(2)
+motor.stop()
+time.sleep(1)
+
+print("Spin right 2 seconds...")
+motor.spin_right(0.5)
+time.sleep(2)
+motor.stop()
+
+print("Motor test complete!")
