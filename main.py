@@ -70,14 +70,14 @@ motor = MotorController()
 
 # Example movements: speeds at 0.5
 run_motor(motor.reverse, 0.5, 2.6)      # 9 inches
-run_motor(motor.spin_left, 0.5, 3.2)    # 11 inches
+run_motor(motor.spin_left, 0.5, 2.8)    # 11 inches
 run_motor(motor.forward, 0.5, 3.2)      # 11 inches
-run_motor(motor.spin_right, 0.5, 3.2)   # 11 inches
-run_motor(motor.forward, 0.5, 10)      # 28 inches
-run_motor(motor.spin_right, 0.5, 3.3)   # 11 inches
-run_motor(motor.forward, 0.5, 55)       # 123 inches
-run_motor(motor.spin_right, 0.5, 3.2)   # 11 inches
-run_motor(motor.forward, 0.5, 4)        # 14 inches
-run_motor(motor.spin_left, 0.5, 3.2)    # 11 inches
-run_motor(motor.forward, 0.5, 3)        # 10 inches
+run_motor(motor.spin_right, 0.5, 2.8)   # 11 inches
+run_motor(motor.forward, 0.5, 8.2)      # 28 inches
+run_motor(motor.spin_right, 0.5, 2.8)   # 11 inches
+run_motor(motor.forward, 0.5, 36)       # 123 inches
+run_motor(motor.spin_right, 0.5, 2.8)   # 11 inches
+run_motor(motor.forward, 0.5, 3)        # 14 inches
+run_motor(motor.spin_left, 0.5, 2.8)    # 11 inches
+run_motor(motor.forward, 0.5, 10)        # 10 inches
 

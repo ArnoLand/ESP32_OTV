@@ -20,7 +20,6 @@ class Ultrasonic:
         return distance
 
 # ------------ Ultrasonic Reaction Test ------------
-motor = MotorController()
 sensor = Ultrasonic(23, 36)
 THRESHOLD = 10  # cm
 
