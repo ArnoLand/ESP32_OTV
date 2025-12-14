@@ -1,37 +1,63 @@
-from machine import Pin, ADC
+from machine import Pin, ADC, PWM
 import time
 
+# ---------- Servo ----------
+class Servo:
+    def __init__(self, pin_num, freq=50):
+        self.pwm = PWM(Pin(pin_num))
+        self.pwm.freq(freq)
+
+    def _write_duty_us(self, us):
+        duty = int((us / 20000) * 65535)
+        self.pwm.duty_u16(duty)
+
+    def forward(self, speed=1.0):
+        speed = max(0.0, min(1.0, speed))
+        us = 1500 + 500 * speed
+        self._write_duty_us(us)
+
+    def reverse(self, speed=1.0):
+        speed = max(0.0, min(1.0, speed))
+        us = 1500 - 500 * speed
+        self._write_duty_us(us)
+
+    def stop(self):
+        self._write_duty_us(1500)
+
+
+# ---------- DIGITAL HALL SENSOR ----------
 class HallSensor:
-    def __init__(self, hall_pin, threshold=400, neutral=2048):
-        self.adc = ADC(Pin(hall_pin))
-        self.adc.atten(ADC.ATTN_11DB)
-        self.adc.width(ADC.WIDTH_12BIT)
-        self.threshold = threshold
-        self.neutral = neutral
+    def __init__(self, hall_pin):
+        self.pin = Pin(hall_pin, Pin.IN)
 
     def is_magnet_detected(self):
-        detections = 0
-        for _ in range(5):
-            raw = self.adc.read()
-            if abs(raw - self.neutral) > self.threshold:
-                detections += 1
-            time.sleep_ms(10)
-        return detections >= 3
+        return self.pin.value() == 0
 
+# ---------- Test Setup ----------
+hall1 = HallSensor(32)
+hall2 = HallSensor(33)
+servo = Servo(17)
 
-
-# HALL SENSOR TEST
-#change hall_pin to whatever the hall effect is connected to
-#if this doesnt work try playing around with the threshold value
-hall = HallSensor(hall_pin=34, threshold=400, neutral=2048) 
+#Move servo briefly
+servo.reverse(0.5)
+time.sleep(1.8)
+servo.stop()
+time.sleep(1.0)
 
 print("Starting Hall Effect Sensor Test...")
 time.sleep(1)
 
+# ---------- Main Loop ----------
+servo.forward(0.5)
+time.sleep(1.8)
+servo.stop()
+time.sleep(0.2)
+
 while True:
-    raw_value = hall.adc.read()
-    detected = hall.is_magnet_detected()
-
-    print("Raw ADC:", raw_value, "| Magnet:", "YES" if detected else "no")
-
+    detected1 = hall1.is_magnet_detected()
+    detected2 = hall2.is_magnet_detected()
+    print(detected1)
+    print(detected2)
     time.sleep(0.3)
+   
+
