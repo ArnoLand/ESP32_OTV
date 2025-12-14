@@ -23,6 +23,14 @@ class Servo:
 
     def stop(self):
         self._write_duty_us(1500)
+
+# ---------- DIGITAL HALL SENSOR ----------
+class HallSensor:
+    def __init__(self, hall_pin):
+        self.pin = Pin(hall_pin, Pin.IN)
+
+    def is_magnet_detected(self):
+        return self.pin.value() == 0
         
 
 # ------------------- Motor Class -------------------
@@ -89,9 +97,11 @@ def run_motor(controller, motor_func, speed, duration):
 
 
 # ------------------- Main Sequence -------------------
-#enes100.begin("Talhapins", "DATA", 381, 1116)
+enes100.begin("Talhapins", "DATA", 381, 1116)
+time.sleep(2.0)
 motor = MotorController()
 servo = Servo(17)
+hall = HallSensor(33)
 
 isNorth = enes100.y > 1
 
@@ -108,12 +118,12 @@ detected = False
 for i in range(10):
     detected = hall.is_magnet_detected()
     if detected:
-        #enes100.mission('MAGNETISM', 'MAGNETIC')
+        enes100.mission('MAGNETISM', 'MAGNETIC')
         break
     time.sleep(0.3)
 
-#if not detected:
-    #enes100.mission('MAGNETISM', 'NOT_MAGNETIC')
+if not detected:
+    enes100.mission('MAGNETISM', 'NOT_MAGNETIC')
 
 # Servo movements
 servo.forward(0.5)
@@ -122,8 +132,9 @@ servo.stop()
 time.sleep(1.0)
 
 # Motor sequence
+#if not north, move to north position
 if isNorth == False:
-    run_motor(motor, motor.reverse, 0.5, 2.5)  # backwards only
+    run_motor(motor, motor.reverse, 0.5, 2.5)  
     run_motor(motor, motor.spin_right, 0.5, 5.9)
     run_motor(motor, motor.forward, 0.5, 5.0)
     run_motor(motor, motor.forward, 0.5, 3.5)
