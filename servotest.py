@@ -25,19 +25,16 @@ class Servo:
         self._write_duty_us(1500)
 
 # ---------- Test ----------
-servo = Servo(2)  
+servo = Servo(17)  
 
 print("Servo test starting... observe motion!")
 
-while True:
-    # Forward sweep
-    servo.forward(1.0)
-    time.sleep(1)
+servo.reverse(0.5)
+time.sleep(1.8)
+servo.stop()
+time.sleep(1)
+servo.forward(0.5)
+time.sleep(1.8)
+servo.stop()
+time.sleep(1)
 
-    # Reverse sweep
-    servo.reverse(1.0)
-    time.sleep(1)
-
-    # Stop
-    servo.stop()
-    time.sleep(1)
